@@ -13,6 +13,8 @@ Written solely in rust; you will need to have cargo installed to compile and run
 
 The project should build and run; make sure the terminal is of an adequate font size and has large enough dimensions; as these are determined only at the start of execution.
 
+It's reccomended that you increase the size of your terminal window for a higher resolution and frankly better looking output.
+
 ## Controls:
 * '`q`' will quit the program.
 * '`-`' and '`=`' will squeeze and stretch your perspective vertically; to compensate for string characters usually being taller than they are wide.
