@@ -1,0 +1,9 @@
+/target
+.DS_Store
+__MACOSX
+.dist
+
+main copy.rs
+main copy 2.rs
+
+notes.txt
