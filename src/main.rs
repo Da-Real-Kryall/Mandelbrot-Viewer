@@ -1,4 +1,4 @@
-#![allow(non_snake_case)]
+//#![allow(non_snake_case)]
 
 extern crate termion;
 
@@ -10,7 +10,7 @@ use termion::event::MouseButton;
 
 const CHARREF: [char; 71] = [' ', '$', '@', 'B', '%', '8', '&', 'W', 'M', '#', '*', 'o', 'a', 'h', 'k', 'b', 'd', 'p', 'q', 'w', 'm', 'Z', 'O', '0', 'Q', 'L', 'C', 'J', 'U', 'Y', 'X', 'z', 'c', 'v', 'u', 'n', 'x', 'r', 'j', 'f', 't', '/', '\\', '|', '(', ')', '1', '{', '}', '[', ']', '?', '-', '_', '+', '~', '<', '>', 'i', '!', 'l', 'I', ';', ':', ',', '"', '^', '`', '\'', '.', ' '];
 
-fn PrintBoard(zoom: f64, centre:(f64, f64), _width: i32, _height: i32, squeeze:f64) {
+fn print_board(zoom: f64, centre:(f64, f64), _width: i32, _height: i32, squeeze:f64) {
     let mut buffer:String = String::new();
 
     let width: f64 = _width as f64 + 1.0;
@@ -30,7 +30,7 @@ fn PrintBoard(zoom: f64, centre:(f64, f64), _width: i32, _height: i32, squeeze:f
                     _x = _x/zoom + centre.0;
                     _y = _y/zoom*squeeze + centre.1; //characters are taller than they are wide; hence the squeeze
 
-                    buffer.push(CalculateChar(_x, _y))
+                    buffer.push(calculate_char(_x, _y))
                 },
                 1 => buffer.push('-'),
                 2 => buffer.push('|'),
@@ -44,7 +44,7 @@ fn PrintBoard(zoom: f64, centre:(f64, f64), _width: i32, _height: i32, squeeze:f
 
 }
 
-fn MandelBrot(x: f64, y: f64) -> i32 {
+fn mandelbrot(x: f64, y: f64) -> i32 {
 
     let mut zx: f64 = 0.0;
     let mut zy: f64 = 0.0;
@@ -63,9 +63,9 @@ fn MandelBrot(x: f64, y: f64) -> i32 {
     i/2
 }
 
-fn CalculateChar(x:f64,y:f64) -> char {
+fn calculate_char(x:f64,y:f64) -> char {
 
-    return CHARREF[((140-MandelBrot(x,y))/2) as usize];
+    return CHARREF[((140-mandelbrot(x,y))/2) as usize];
 }
 
 
@@ -80,7 +80,7 @@ fn main() {
     let mut zoom: f64 = 1.0;
     let mut centre: (f64, f64) = (0.0,0.0);
     let mut squeeze: f64 = 1.0;
-    PrintBoard(zoom, centre, width, height, squeeze);
+    print_board(zoom, centre, width, height, squeeze);
     
     for c in stdin.events() {
         let evt: Event = c.unwrap();
@@ -126,6 +126,6 @@ fn main() {
                 }
                 _ => {}
             }
-            PrintBoard(zoom, centre, width, height, squeeze);
+            print_board(zoom, centre, width, height, squeeze);
         }
 }
