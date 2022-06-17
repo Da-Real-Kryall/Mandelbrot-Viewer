@@ -18,7 +18,7 @@ It's reccomended that you increase the size of your terminal window for a higher
 ## Controls:
 * '`q`' will quit the program.
 * '`-`' and '`=`' will squeeze and stretch your perspective vertically; to compensate for string characters usually being taller than they are wide.
-* [`Arrow keys`] will move the perspective in their respective cardinal directions.
+* the `UP` and `DOWN` arrow keys will increment and decrement respectively the number of iterations; and thus the detail of the fractal.
 * Scrolling will zoom in and out.
 * Left clicking will shift perspective towards the location that was clicked.
 
