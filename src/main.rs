@@ -15,15 +15,16 @@ const CHARREF: [char; 71] = [
     '>', 'i', '!', 'l', 'I', ';', ':', ',', '"', '^', '`', '\'', '.', ' ',
 ];
 
-fn print_board(zoom: f64, centre: (f64, f64), _width: i32, _height: i32, squeeze: f64, max_iter: i32) {
+fn print_board(zoom: f64, centre: (f64, f64), _width: i32, _height: i32, squeeze: f64, max_iter: i32, crosshair: bool, _x: u16, _y: u16) {
     let mut buffer: String = String::new();
-
+    
     let width: f64 = _width as f64 + 1.0;
     let height: f64 = _height as f64 + 1.0;
-
+    //if _y <= 1 {let mut _x = 0; let mut _y = 0;};
+    //if _x <= 1 {let mut _x = 0; let mut _y = 0;};
     for i in 0..(_height + 2) as i32 {
         for j in 0..(_width + 2) as i32 {
-            let case: i32 = (i % (_height + 1) == 0) as i32 + (j % (_width + 1) == 0) as i32 * 2;
+            let case: i32 = (i % (_height + 1) == 0 || if crosshair == true {i % (_height + 1) == _y as i32} else {false}) as i32 + (j % (_width + 1) == 0 || if crosshair == true {j % (_width + 1) == _x as i32} else {false}) as i32 * 2;
 
             match case {
                 0 => {
@@ -79,7 +80,7 @@ fn main() {
     let mut centre: (f64, f64) = (0.0, 0.0);
     let mut squeeze: f64 = 1.0;
     let mut max_iter: i32 = 70;
-    print_board(zoom, centre, width, height, squeeze, max_iter);
+    print_board(zoom, centre, width, height, squeeze, max_iter, false, 0, 0);
 
     for c in stdin.events() {
         let evt: Event = c.unwrap();
@@ -96,8 +97,7 @@ fn main() {
                 _ => (),
             },
             Event::Mouse(me) => match me {
-                MouseEvent::Press(b, _x, _y) => match b {
-                    MouseButton::Left => {
+                MouseEvent::Release(_x, _y) => {                    
                         let x: f64 = _x as f64 - ((width + 1) as f64 / 2.0);
                         let y: f64 = _y as f64 - ((height + 1) as f64 / 2.0);
                         centre.0 = centre.0 + x/zoom;
@@ -115,17 +115,28 @@ fn main() {
                         centre.0 = new_x + centre.0;
                         centre.1 = new_y + centre.1;
                         */
-                    }
+                        print_board(zoom, centre, width, height, squeeze, max_iter, false, 0, 0);
+                },
+                MouseEvent::Hold(_x, _y) => {
+                    print_board(zoom, centre, width, height, squeeze, max_iter, true, _x, _y);
+                },
+                MouseEvent::Press(b, _x, _y) => match b {
+                    MouseButton::Left => {
+                        print_board(zoom, centre, width, height, squeeze, max_iter, true, _x, _y);
+                    },
                     MouseButton::WheelDown => {
                         zoom = if zoom < 1.0 { 1.0 } else { zoom - zoom * 0.1 };
-                    }
-                    MouseButton::WheelUp => zoom += zoom * 0.1,
+                        print_board(zoom, centre, width, height, squeeze, max_iter, false, 0, 0);
+                    },
+                    MouseButton::WheelUp => {
+                        zoom += zoom * 0.1;
+                        print_board(zoom, centre, width, height, squeeze, max_iter, false, 0, 0);
+                    },
                     _ => (),
                 },
                 _ => (),
             },
             _ => {}
         }
-        print_board(zoom, centre, width, height, squeeze, max_iter);
     }
 }
