@@ -100,6 +100,9 @@ fn main() {
                     MouseButton::Left => {
                         let x: f64 = _x as f64 - ((width + 1) as f64 / 2.0);
                         let y: f64 = _y as f64 - ((height + 1) as f64 / 2.0);
+                        centre.0 = centre.0 + x/zoom;
+                        centre.1 = centre.1 + y/zoom*squeeze;
+                        /*
                         let hyp = 5.0
                             * step
                             * ((y * y + x * x).sqrt()
@@ -111,6 +114,7 @@ fn main() {
                         let new_y: f64 = hyp * angle.sin();
                         centre.0 = new_x + centre.0;
                         centre.1 = new_y + centre.1;
+                        */
                     }
                     MouseButton::WheelDown => {
                         zoom = if zoom < 1.0 { 1.0 } else { zoom - zoom * 0.1 };
